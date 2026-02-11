@@ -17,29 +17,48 @@ fun MapaUbicacion(
     ubicacion: Ubicacion?,
     puntosGuardados: List<Ubicacion>,
     context: Context
-){
+) {
     AndroidView(
-        factory = {ctx->
-            Configuration.getInstance().load(ctx,ctx.getSharedPreferences("osmdroid",
-                Context.MODE_PRIVATE))
+        factory = { ctx ->
+            Configuration.getInstance().load(ctx, ctx.getSharedPreferences("osmdroid", Context.MODE_PRIVATE))
 
             MapView(ctx).apply {
                 setTileSource(TileSourceFactory.MAPNIK)
-
                 zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
                 setMultiTouchControls(true)
-                isClickable=true
-
-               // controller.setCenter(GeoPoint(lat,ing))
-
-                val marker = Marker(this)
-               // marker.position= GeoPoint(lat,ing)
-
-               // marker.position= GeoPoint(lat,ing)
-                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                overlays.add(marker)
+                controller.setZoom(15.0) // Zoom inicial
             }
+        },
+        update = { mapView ->
+            // Esta parte se ejecuta cuando cambia la 'ubicacion'
+            ubicacion?.let { ubi ->
+                val puntoActual = GeoPoint(ubi.lat, ubi.ing)
 
+                // Centrar el mapa
+                mapView.controller.setCenter(puntoActual)
+
+                // Limpiar marcadores antiguos para no acumularlos
+                mapView.overlays.clear()
+
+                // Marcador posición actual
+                val marker = Marker(mapView)
+                marker.position = puntoActual
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                marker.title = "Yo"
+                mapView.overlays.add(marker)
+
+                // (Opcional) Dibujar también los puntos guardados
+                puntosGuardados.forEach { guardado ->
+                    val m = Marker(mapView)
+                    m.position = GeoPoint(guardado.lat, guardado.ing)
+                    m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                    m.title = "Guardado"
+                    // Puedes cambiar el icono aquí si quieres diferenciarlo
+                    mapView.overlays.add(m)
+                }
+
+                mapView.invalidate() // Refrescar mapa
+            }
         }
     )
 }
