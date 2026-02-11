@@ -3,6 +3,7 @@ package com.arv.practica.ui
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
+import com.arv.practica.models.Ubicacion
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint

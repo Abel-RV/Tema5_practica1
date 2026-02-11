@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.arv.practica.data.AppDatabase
 import com.arv.practica.data.PuntoInteresRepository
 import com.arv.practica.models.PuntoInteres
+import com.arv.practica.models.Ubicacion
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 
-data class Ubicacion(val lat: Double,val Ing: Double)
 
 class UbicacionViewModel(application: Application): AndroidViewModel(application) {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
@@ -64,13 +64,13 @@ class UbicacionViewModel(application: Application): AndroidViewModel(application
                 location?.let {
                     val ubi = Ubicacion(it.latitude,it.longitude)
                     _ubicacion.value=ubi
-                    obtenerDireccion(ubi.lat,ubi.Ing)
+                    obtenerDireccion(ubi.lat,ubi.ing)
                 }
             }
         }
     }
 
-    fun guardarPunto(nombre:String,ubicacion: Ubicacion,direccion:String){
+    fun guardarPunto(nombre:String,ubicacion: com.arv.practica.models.Ubicacion,direccion:String){
         viewModelScope.launch {
             val punto = PuntoInteres(
                 nombre=nombre,

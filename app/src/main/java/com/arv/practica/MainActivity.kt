@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            RutaPersonalApp()
         }
     }
 }
@@ -68,10 +69,10 @@ fun RutaPersonalApp(){
             Text("Obtener ubicacion")
         }
         ubicacionVm.ubicacion.collectAsState().value?.let {
-            Text("Ubicacion: ${it.lat}, ${it.Ing}")
+            Text("Ubicacion: ${it.lat}, ${it.ing}")
             Text("Direccion: ${ubicacionVm.direccion.collectAsState().value}")
             Spacer(modifier = Modifier.height(16.dp))
-            MapaUbicacion(it.lat,it.Ing,LocalContext.current)
+            MapaUbicacion(it.lat,it.ing,LocalContext.current)
         }
         // Text("Aceleracion X: ${String.format("%.2f",sensorVm.aceleracionX.collectAsState().value)}")
 
